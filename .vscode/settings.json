@@ -1,0 +1,5 @@
+// vscode 配置 css 模块化智能提示配置
+{
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"typescript.enablePromptUseWorkspaceTsdk": true
+}

@@ -143,7 +143,9 @@ const App: React.FC = (props) => {
       {error && <div>网站出错：{error}</div>}
       {!loading ? (
         <div className={styles.robotList}>
-          {robotGallery.map( r => <Robot id={r.id} email={r.email} name={r.name} />)}
+          {robotGallery.map( r => (
+            <Robot id={r.id} email={r.email} name={r.name} />
+          ))}
         </div>
       ) : (
         <h2>加载中...</h2>

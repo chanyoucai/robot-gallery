@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './assets/images/logo.svg';
 import styles from './App.module.css';
 import robots from './mockdata/robots.json';
@@ -97,12 +97,37 @@ interface State {
 //   }
 // }
 
-// hooks初体验 useState
+// hook初体验 useState，useEffect
 const App: React.FC = (props) => {
   // useState 传入一个初始值，返回一个数组
   // count初始值为 useState 的初始值：0
   // setCount 为更新 count 的方法
   const [count, setCount] = useState<number>(0)
+  const [robotGallery, setRobotGallery] = useState<any>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string>()
+
+
+  // 第一个参数数据更新后执行的方法，第二个参数为想要追踪的state属性数组
+  useEffect(() => {
+    document.title = `点击${count}次`
+  }, [count])
+
+  useEffect(() => {
+    const fetcnData = async () => {
+      setLoading(true)
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/users")
+        const data = await res.json()
+        setRobotGallery(data)
+      } catch (error) {
+        // setError(error)
+      }
+      setLoading(false)
+    }
+
+    fetcnData()
+  }, [])
 
   return (
     <div className={styles.app}>
@@ -115,9 +140,14 @@ const App: React.FC = (props) => {
       </button>
       <span>count: {count}</span>
       <ShoppingCart />
-      <div className={styles.robotList}>
-        {robots.map( r => <Robot id={r.id} email={r.email} name={r.name} />)}
-      </div>
+      {error && <div>网站出错：{error}</div>}
+      {!loading ? (
+        <div className={styles.robotList}>
+          {robotGallery.map( r => <Robot id={r.id} email={r.email} name={r.name} />)}
+        </div>
+      ) : (
+        <h2>加载中...</h2>
+      )}
     </div>
   )
 }
